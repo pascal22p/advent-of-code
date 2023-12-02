@@ -2,9 +2,9 @@ use std::fs::read_to_string;
 
 #[derive(PartialEq, PartialOrd, Debug)]
 pub struct Rgb {
-    pub red: i32,
-    pub green: i32,
-    pub blue: i32
+    pub red: Option<i32>,
+    pub green: Option<i32>,
+    pub blue: Option<i32>
 }
 
 impl Rgb {
@@ -19,31 +19,34 @@ impl Rgb {
             (colour, number)
         }).collect();
 
-        let red = *colour_map.clone()
+        let binding = colour_map.clone()
         .into_iter()
         .filter(|(colour, _)| colour == &"red")
         .map(|(_, number)| number)
-        .collect::<Vec<i32>>()
-        .get(0).unwrap_or(&0);
+        .collect::<Vec<i32>>();
+        let red = binding
+        .get(0);
 
-        let green = *colour_map.clone()
+        let binding = colour_map.clone()
         .into_iter()
         .filter(|(colour, _)| colour == &"green")
         .map(|(_, number)| number)
-        .collect::<Vec<i32>>()
-        .get(0).unwrap_or(&0);
+        .collect::<Vec<i32>>();
+        let green = binding
+        .get(0);
 
-        let blue = *colour_map.clone()
+        let binding = colour_map.clone()
         .into_iter()
         .filter(|(colour, _)| colour == &"blue")
         .map(|(_, number)| number)
-        .collect::<Vec<i32>>()
-        .get(0).unwrap_or(&0);
+        .collect::<Vec<i32>>();
+        let blue = binding
+        .get(0);
 
         return Rgb {
-            red,
-            green,
-            blue
+            red: red.copied(),
+            green: green.copied(),
+            blue: blue.copied()
         }
     }
 }
@@ -77,10 +80,25 @@ pub fn part1(_input: &str) -> (i32, bool) {
     let id = get_game_id(_input);
     let games: Vec<Rgb> = get_games(_input);
     let valid = games.iter()
-    .filter(|rgb| rgb.red > 12 || rgb.green > 13 || rgb.blue > 14)
+    .filter(|rgb| rgb.red.unwrap_or(0) > 12 || rgb.green.unwrap_or(0) > 13 || rgb.blue.unwrap_or(0) > 14)
     .collect::<Vec<&Rgb>>()
     .is_empty();
     return (id, valid);
+}
+
+pub fn part2(_input: &str) -> i32 {
+    let games: Vec<Rgb> = get_games(_input);
+    let min_red = games.iter()
+    .map(|rgb| rgb.red.unwrap_or(1))
+    .max().unwrap_or(1);
+    let min_green = games.iter()
+    .map(|rgb| rgb.green.unwrap_or(1))
+    .max().unwrap_or(1);
+    let min_blue = games.iter()
+    .map(|rgb| rgb.blue.unwrap_or(1))
+    .max().unwrap_or(1);
+
+    return min_red * min_green * min_blue;
 }
 
 pub fn day2_part1(filename: &str) -> Vec<i32> {
@@ -93,4 +111,11 @@ pub fn day2_part1(filename: &str) -> Vec<i32> {
         .collect()
 }
 
+pub fn day2_part2(filename: &str) -> Vec<i32> {
+    read_to_string(filename) 
+        .unwrap()  // panic on possible file-reading errors
+        .lines()  // split the string into an iterator of string slices
+        .map(part2)  // make each slice into a string
+        .collect()
+}
     
