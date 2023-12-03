@@ -112,3 +112,36 @@ fn part1_get_neighbours() {
 
     assert_eq!(expected, day3::get_neighbours(input_copy,symbols));
 }
+
+#[test]
+fn part2_get_gears() {
+    let input: Vec<Vec<char>> = vec![
+        vec!['4','6','7','.','.','1','1','4','.','.'],
+        vec!['.','.','.','*','.','.','.','.','.','.'],
+        vec!['.','.','3','5','.','.','6','3','3','.'],
+        vec!['.','.','.','.','.','.','#','.','.','.'],
+        vec!['6','1','7','*','.','.','.','.','.','.'],
+        vec!['.','.','.','.','.','+','.','5','8','.'],
+        vec!['.','.','5','9','2','.','.','.','.','.'],
+        vec!['.','.','.','.','.','.','7','5','5','.'],
+        vec!['.','.','.','$','.','*','.','.','.','.'],
+        vec!['.','6','6','4','.','5','9','8','.','.']
+    ];
+
+    let symbols: Vec<Symbol> = vec![
+        Symbol { symbol: '*', row: 1, col: 3 }, 
+        Symbol { symbol: '#', row: 3, col: 6 }, 
+        Symbol { symbol: '*', row: 4, col: 3 }, 
+        Symbol { symbol: '+', row: 5, col: 5 }, 
+        Symbol { symbol: '$', row: 8, col: 3 }, 
+        Symbol { symbol: '*', row: 8, col: 5 }
+    ];
+
+    let expected: Vec<i32> = vec![
+        16345, 451490
+    ];
+
+    let input_copy = input.clone();
+
+    assert_eq!(expected, day3::get_gears(input_copy,symbols));
+}

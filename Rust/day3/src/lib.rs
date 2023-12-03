@@ -135,3 +135,35 @@ pub fn read_and_delete_number(data: Vec<Vec<char>>, row: usize, col: usize) -> (
 
     return (number.iter().collect::<String>().parse::<i32>().unwrap(), result);
 }
+
+pub fn get_gears(data: Vec<Vec<char>>, symbols: Vec<Symbol>) -> Vec<i32> {
+    let mut temp_data = data.clone();
+    let digits: Vec<char> = vec!['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    let mut gears: Vec<i32> = Vec::new();
+
+    for symbol in symbols.iter().filter(|symbol| symbol.symbol == '*') {
+        let mut neighbours: Vec<i32> = Vec::new();
+
+        let row_min = cmp::max(symbol.row - 1, 0);
+        let row_max = cmp::min(symbol.row + 2, data.len());
+
+        let col_min = cmp::max(symbol.col - 1, 0);
+        let col_max = cmp::min(symbol.col + 2, data[0].len());
+
+        for row in row_min..row_max {
+            for col in col_min..col_max {
+                if digits.contains(&temp_data[row][col]) {
+                    let result = read_and_delete_number(temp_data, row, col);
+                    temp_data = result.1;
+                    neighbours.push(result.0);
+                }
+            }
+        }
+
+        if neighbours.len() == 2 {
+            gears.push(neighbours[0] * neighbours[1]);
+        }
+
+    }
+    return gears;
+}
