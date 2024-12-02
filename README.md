@@ -1,4 +1,4 @@
-# advent-of-code-2023
+# advent-of-code
 
 This project is using Rust. Bear in mind that I just started learning Rust so it is probably not the best use of the language.
 
